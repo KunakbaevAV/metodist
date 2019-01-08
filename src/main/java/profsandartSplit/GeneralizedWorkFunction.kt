@@ -28,8 +28,8 @@ data class GeneralizedWorkFunction(
         @SerializedName("PossibleJobTitles")
         @Expose
         val possibleJobTitles: PossibleJobTitles?,
-        @SerializedName("RequirementsWorkExperiences")
-        @Expose
+//        @SerializedName("RequirementsWorkExperiences")
+//        @Expose
         val requirementsWorkExperiences: RequirementsWorkExperiences?,
         @SerializedName("SpecialConditionsForAdmissionToWork")
         @Expose
