@@ -75,8 +75,9 @@ class Controller {
     }
 
     fun readProfstandart(thisProfName: String) {
+        val patch = javaClass.getResource(thisProfName + ".json") // пытаюсь передать путь к файлам
         profstandart = ProfParser().parsing(
-                "src/main/resources/$thisProfName.json")
+                patch.toString())
         profName.text = profstandart!!.xMLCardInfo!!.professionalStandarts!!
                 .professionalStandart!!.nameProfessionalStandart
         purposeKindProfessionalActivity.text = profstandart!!.xMLCardInfo!!.professionalStandarts!!
