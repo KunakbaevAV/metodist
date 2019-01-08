@@ -6,6 +6,7 @@ import profsandartSplit.GeneralizedWorkFunction
 import profsandartSplit.ParticularWorkFunction
 import profsandartSplit.ProfstandartSplit
 import profstandart.ProfParser
+import java.net.URLDecoder
 
 /**
  * @autor Kunakbaev Artem
@@ -75,9 +76,16 @@ class Controller {
     }
 
     fun readProfstandart(thisProfName: String) {
-        val patch = javaClass.getResource(thisProfName + ".json") // пытаюсь передать путь к файлам
-        profstandart = ProfParser().parsing(
-                patch.toString())
+        val patch = javaClass.getResource("$thisProfName.json") // пытаюсь передать путь к файлам
+//        println(patch.toString())
+        val prefix = "/resources"
+        val urlToString = URLDecoder.decode(patch.toString(), "UTF-8")
+        val newPatch = urlToString.substringAfter("/")
+        val newPatch2 = newPatch.replace("!", "")
+//        val realPatch = javaClass.getResource("son").toString()
+        textAreaDetails.text = newPatch2
+
+        profstandart = ProfParser().parsing(newPatch2)
         profName.text = profstandart!!.xMLCardInfo!!.professionalStandarts!!
                 .professionalStandart!!.nameProfessionalStandart
         purposeKindProfessionalActivity.text = profstandart!!.xMLCardInfo!!.professionalStandarts!!
@@ -89,7 +97,7 @@ class Controller {
     fun readWF() {
         val observableListTF: ObservableList<ParticularWorkFunction?>? =
                 FXCollections.observableArrayList(generalizedWorkFunction!!
-                .particularWorkFunctions!!.particularWorkFunction)
+                        .particularWorkFunctions!!.particularWorkFunction)
         listViewWF.items = observableListTF
     }
 
@@ -97,7 +105,7 @@ class Controller {
         val observableList: ObservableList<String> = FXCollections.observableArrayList(arrayChoiceBox)
         choiceBox.items = observableList
         choiceBox.setOnAction {
-            when (choiceBox.selectionModel.selectedItem!!){
+            when (choiceBox.selectionModel.selectedItem!!) {
                 arrayChoiceBox[0] -> {
                     details = Details.ACTIONS
                     showDetals()
@@ -127,10 +135,10 @@ class Controller {
 
     private fun showDetals() {
 
-        if (workFunction == null){
+        if (workFunction == null) {
             textAreaDetails.text = "Не выбрана трудовая функция"
-        }else{
-            when(details){
+        } else {
+            when (details) {
                 Details.ACTIONS -> textAreaDetails.text = workFunction!!.laborActions.toString()
                 Details.SKILLS -> textAreaDetails.text = workFunction!!.requiredSkills.toString()
                 Details.KNOWLEDGES -> textAreaDetails.text = workFunction!!.necessaryKnowledges.toString()
