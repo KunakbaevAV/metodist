@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="604.0" prefWidth="834.0"
-            xmlns="http://javafx.com/javafx/8.0.172-ea" fx:controller="Controller">
-    <Button fx:id="buttonProf" layoutX="24.0" layoutY="551.0" mnemonicParsing="false"
-            onAction="#initListViewProfstandarts" text="Профстандарты"/>
-    <Label layoutX="24.0" layoutY="14.0" prefHeight="27.0" prefWidth="345.0"
-           text="Название профессионального стандарта"/>
-    <TextArea fx:id="purposeKindProfessionalActivity" depthTest="DISABLE" layoutX="25.0" layoutY="107.0"
-              minHeight="-Infinity" prefHeight="50.0" prefWidth="590.0" wrapText="true"/>
-    <TextField fx:id="profName" layoutX="24.0" layoutY="41.0" prefHeight="39.0" prefWidth="590.0"/>
-    <Label layoutX="25.0" layoutY="80.0" prefHeight="27.0" prefWidth="453.0"
-           text="Основная цель вида профессиональной деятельности"/>
-    <ListView fx:id="listViewGWF" layoutX="25.0" layoutY="211.0" prefHeight="200.0" prefWidth="273.0"/>
-    <Label layoutX="25.0" layoutY="170.0" text="Обобщенные трудовые функции:"/>
-    <Label layoutX="318.0" layoutY="170.0" text="Трудовые функции:"/>
-    <ListView fx:id="listViewWF" layoutX="318.0" layoutY="211.0" prefHeight="200.0" prefWidth="508.0"/>
-    <TextArea fx:id="detals" layoutX="24.0" layoutY="423.0" prefHeight="114.0" prefWidth="801.0" wrapText="true"/>
-    <ListView fx:id="listProfsandarts" layoutX="626.0" layoutY="41.0" prefHeight="165.0" prefWidth="200.0"/>
-    <Label layoutX="626.0" layoutY="14.0" text="Список профстандартов"/>
-    <Button fx:id="buttonDownload" layoutX="197.0" layoutY="551.0" mnemonicParsing="false" onAction="#readProfstandart"
-            text="Загрузить"/>
+
+<AnchorPane prefHeight="604.0" prefWidth="834.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+    <Button fx:id="buttonProf" layoutX="604.0" layoutY="9.0" mnemonicParsing="false" onAction="#initListViewProfstandarts" text="Загрузить" AnchorPane.rightAnchor="160.0" AnchorPane.topAnchor="4.0" />
+    <Label layoutX="24.0" layoutY="14.0" prefHeight="27.0" prefWidth="345.0" text="Название профессионального стандарта" AnchorPane.leftAnchor="24.0" AnchorPane.topAnchor="8.0" />
+    <TextArea fx:id="purposeKindProfessionalActivity" depthTest="DISABLE" layoutX="25.0" layoutY="107.0" minHeight="-Infinity" prefHeight="76.0" prefWidth="590.0" wrapText="true" AnchorPane.leftAnchor="8.0" AnchorPane.topAnchor="84.0" />
+    <TextField fx:id="profName" layoutX="24.0" layoutY="41.0" prefHeight="24.0" prefWidth="590.0" AnchorPane.leftAnchor="8.0" AnchorPane.topAnchor="40.0" />
+    <Label layoutX="25.0" layoutY="80.0" prefHeight="27.0" prefWidth="453.0" text="Основная цель вида профессиональной деятельности" AnchorPane.leftAnchor="24.0" AnchorPane.topAnchor="60.0" />
+    <ListView fx:id="listViewGWF" layoutX="25.0" layoutY="211.0" prefHeight="200.0" prefWidth="304.0" AnchorPane.leftAnchor="8.0" AnchorPane.topAnchor="194.0" />
+    <Label layoutX="25.0" layoutY="170.0" text="Обобщенные трудовые функции:" AnchorPane.leftAnchor="24.0" AnchorPane.topAnchor="170.0" />
+    <Label layoutX="318.0" layoutY="170.0" text="Трудовые функции:" AnchorPane.leftAnchor="324.0" AnchorPane.topAnchor="170.0" />
+    <ListView fx:id="listViewWF" layoutX="318.0" layoutY="211.0" prefHeight="200.0" prefWidth="508.0" AnchorPane.leftAnchor="318.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="194.0" />
+    <TextArea fx:id="textAreaDetails" layoutX="24.0" layoutY="428.0" prefHeight="136.0" prefWidth="818.0" wrapText="true" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="424.0" />
+    <ListView fx:id="listProfsandarts" layoutX="626.0" layoutY="41.0" minWidth="-Infinity" prefHeight="120.0" prefWidth="120.0" AnchorPane.leftAnchor="604.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="40.0" />
+    <Label layoutX="626.0" layoutY="14.0" text="Список профстандартов" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="8.0" />
+   <Label layoutX="10.0" layoutY="404.0" text="Подробнее" AnchorPane.leftAnchor="24.0" AnchorPane.topAnchor="400.0" />
+   <ChoiceBox fx:id="choiceBox" layoutX="676.0" layoutY="396.0" prefWidth="150.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="396.0" />
 </AnchorPane>

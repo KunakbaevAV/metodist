@@ -7,4 +7,8 @@ data class NecessaryKnowledges(
         @SerializedName("NecessaryKnowledge")
         @Expose
         val necessaryKnowledge: List<String?>?
-)
+){
+        override fun toString(): String {
+                return necessaryKnowledge!!.joinToString(separator = "\n")
+        }
+}

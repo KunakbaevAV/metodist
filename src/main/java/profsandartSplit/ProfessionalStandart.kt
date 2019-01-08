@@ -25,4 +25,8 @@ data class ProfessionalStandart(
         @SerializedName("ThirdSection")
         @Expose
         val thirdSection: ThirdSection?
-)
+){
+        override fun toString(): String {
+                return "$nameProfessionalStandart"
+        }
+}
