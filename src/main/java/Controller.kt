@@ -12,6 +12,7 @@ import java.net.URLDecoder
  * @autor Kunakbaev Artem
  */
 class Controller {
+    val defaultLog = "©АртМил"
     val arrayProfstandarts = arrayListOf(
             "255 Оператор по добыче нефти, газа и газового конденсата",
             "821 Работник по эксплуатации оборудования по добыче нефти, газа и газового конденсата",
@@ -61,6 +62,9 @@ class Controller {
     @FXML
     var choiceBox = ChoiceBox<String>()
 
+    @FXML
+    var logPanel = Label()
+
     fun initListViewProfstandarts() {
         val observableList: ObservableList<String> =
                 FXCollections.observableArrayList(arrayProfstandarts)
@@ -78,7 +82,7 @@ class Controller {
     fun readProfstandart(thisProfName: String) {
         val patch = javaClass.getResource("$thisProfName.json") // пытаюсь передать путь к файлам
 //        println(patch.toString())
-        val prefix = "/resources"
+//        val prefix = "/resources"
         val urlToString = URLDecoder.decode(patch.toString(), "UTF-8")
         val newPatch = urlToString.substringAfter("/")
         val newPatch2 = newPatch.replace("!", "")
