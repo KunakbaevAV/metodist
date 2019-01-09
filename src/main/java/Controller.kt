@@ -13,8 +13,10 @@ import java.net.URLDecoder
  * @autor Kunakbaev Artem
  */
 class Controller {
-    val profFolder = "prof/"
+    val profFolder = "профстандарты/"
     val defaultLog = "©АртМил"
+    val appName = "metodist"
+    var thisProfstandartPatch = ""
     val arrayProfstandarts = arrayListOf(
             "255 Оператор по добыче нефти, газа и газового конденсата",
             "821 Работник по эксплуатации оборудования по добыче нефти, газа и газового конденсата",
@@ -36,9 +38,6 @@ class Controller {
     var profstandart: ProfstandartSplit? = null
     var generalizedWorkFunction: GeneralizedWorkFunction? = null
     var workFunction: ParticularWorkFunction? = null
-
-    @FXML
-    val buttonDownload = Button()
 
     @FXML
     val buttonProf = Button()
@@ -68,8 +67,10 @@ class Controller {
     var logPanel = Label()
 
     fun initListViewProfstandarts() {
+        val profList = ArrayList<String>()
+        profList.addAll(getArrayProfst())
         val observableList: ObservableList<String> =
-                FXCollections.observableArrayList(arrayProfstandarts)
+                FXCollections.observableArrayList(profList)
         listProfsandarts.items = observableList
         listProfsandarts.setOnMouseClicked {
             readProfstandart(listProfsandarts.selectionModel.selectedItem)
@@ -79,20 +80,17 @@ class Controller {
             showDetals()
         }
         initChoiceBox()
-        logPanel.text = getArrayProfst().joinToString()
     }
 
     fun readProfstandart(thisProfName: String) {
-        val patch = javaClass.getResource("$thisProfName.json") // пытаюсь передать путь к файлам
-//        println(patch.toString())
-//        val prefix = "/resources"
-        val urlToString = URLDecoder.decode(patch.toString(), "UTF-8")
-        val newPatch = urlToString.substringAfter("/")
-        val newPatch2 = newPatch.replace("!", "")
-//        val realPatch = javaClass.getResource("son").toString()
-//        textAreaDetails.text = newPatch2
+        val patch = getProfstFolder() + thisProfName // пытаюсь передать путь к файлам
 
-        profstandart = ProfParser().parsing(newPatch2)
+        try {
+            profstandart = ProfParser().parsing(patch)
+        } catch (e: java.lang.Exception) {
+            logPanel.text = e.message
+        }
+
         profName.text = profstandart!!.xMLCardInfo!!.professionalStandarts!!
                 .professionalStandart!!.nameProfessionalStandart
         purposeKindProfessionalActivity.text = profstandart!!.xMLCardInfo!!.professionalStandarts!!
@@ -180,7 +178,7 @@ class Controller {
         val appPatch = javaClass.protectionDomain.codeSource.location.path
         val decoderAppPatch = URLDecoder.decode(appPatch, "UTF-8")
         val dirtyPatch = decoderAppPatch + profFolder
-        val cleanPatch = dirtyPatch.replace("metodist.jar", "")
+        val cleanPatch = dirtyPatch.replace("$appName.jar", "")
         return cleanPatch.substring(1)
     }
 
