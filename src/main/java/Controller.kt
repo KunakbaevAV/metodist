@@ -6,12 +6,14 @@ import profsandartSplit.GeneralizedWorkFunction
 import profsandartSplit.ParticularWorkFunction
 import profsandartSplit.ProfstandartSplit
 import profstandart.ProfParser
+import java.io.File
 import java.net.URLDecoder
 
 /**
  * @autor Kunakbaev Artem
  */
 class Controller {
+    val profFolder = "prof/"
     val defaultLog = "©АртМил"
     val arrayProfstandarts = arrayListOf(
             "255 Оператор по добыче нефти, газа и газового конденсата",
@@ -77,6 +79,7 @@ class Controller {
             showDetals()
         }
         initChoiceBox()
+        logPanel.text = getArrayProfst().joinToString()
     }
 
     fun readProfstandart(thisProfName: String) {
@@ -87,7 +90,7 @@ class Controller {
         val newPatch = urlToString.substringAfter("/")
         val newPatch2 = newPatch.replace("!", "")
 //        val realPatch = javaClass.getResource("son").toString()
-        textAreaDetails.text = newPatch2
+//        textAreaDetails.text = newPatch2
 
         profstandart = ProfParser().parsing(newPatch2)
         profName.text = profstandart!!.xMLCardInfo!!.professionalStandarts!!
@@ -171,6 +174,25 @@ class Controller {
             showDetals()
             readWF()
         }
+    }
+
+    private fun getProfstFolder(): String? {
+        val appPatch = javaClass.protectionDomain.codeSource.location.path
+        val decoderAppPatch = URLDecoder.decode(appPatch, "UTF-8")
+        val dirtyPatch = decoderAppPatch + profFolder
+        val cleanPatch = dirtyPatch.replace("metodist.jar", "")
+        return cleanPatch.substring(1)
+    }
+
+
+    private fun getArrayProfst(): Array<String> {
+        val folder = File(getProfstFolder())
+        val listOfFiles = folder.listFiles()
+        val arrayProfst = Array(listOfFiles.size) { "" }
+        for (i in 0 until listOfFiles.size) {
+            if (listOfFiles[i].isFile) arrayProfst[i] = listOfFiles[i].name
+        }
+        return arrayProfst
     }
 }
 
