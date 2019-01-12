@@ -2,10 +2,10 @@ import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.fxml.FXML
 import javafx.scene.control.*
-import profsandartSplit.GeneralizedWorkFunction
-import profsandartSplit.ParticularWorkFunction
-import profsandartSplit.ProfstandartSplit
-import profstandart.ProfParser
+import prof_parser.ProfParser
+import profsandart.AProfstandart
+import profsandart.GeneralizedWorkFunction
+import profsandart.ParticularWorkFunction
 import java.io.File
 import java.net.URLDecoder
 
@@ -35,7 +35,7 @@ class Controller {
 
     var details = Details.ACTIONS
 
-    var profstandart: ProfstandartSplit? = null
+    var AProfstandart: AProfstandart? = null
     var generalizedWorkFunction: GeneralizedWorkFunction? = null
     var workFunction: ParticularWorkFunction? = null
 
@@ -86,14 +86,14 @@ class Controller {
         val patch = getProfstFolder() + thisProfName // пытаюсь передать путь к файлам
 
         try {
-            profstandart = ProfParser().parsing(patch)
+            AProfstandart = ProfParser().parsing(patch)
         } catch (e: java.lang.Exception) {
             logPanel.text = e.message
         }
 
-        profName.text = profstandart!!.xMLCardInfo!!.professionalStandarts!!
+        profName.text = AProfstandart!!.xMLCardInfo!!.professionalStandarts!!
                 .professionalStandart!!.nameProfessionalStandart
-        purposeKindProfessionalActivity.text = profstandart!!.xMLCardInfo!!.professionalStandarts!!
+        purposeKindProfessionalActivity.text = AProfstandart!!.xMLCardInfo!!.professionalStandarts!!
                 .professionalStandart!!.firstSection!!.purposeKindProfessionalActivity
         initListViewGeneralizedWorkFunctions()
         initListViewWorkFunctions()
@@ -155,7 +155,7 @@ class Controller {
 
     private fun initListViewGeneralizedWorkFunctions() {
         //создаю ObservableList из листа названий обобщенных ТФ
-        val observableListGTF: ObservableList<GeneralizedWorkFunction> = FXCollections.observableArrayList(profstandart!!
+        val observableListGTF: ObservableList<GeneralizedWorkFunction> = FXCollections.observableArrayList(AProfstandart!!
                 .xMLCardInfo!!
                 .professionalStandarts!!
                 .professionalStandart!!
