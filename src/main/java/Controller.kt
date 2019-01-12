@@ -16,15 +16,6 @@ class Controller {
     val profFolder = "профстандарты/"
     val defaultLog = "©АртМил"
     val appName = "metodist"
-    var thisProfstandartPatch = ""
-    val arrayProfstandarts = arrayListOf(
-            "255 Оператор по добыче нефти, газа и газового конденсата",
-            "821 Работник по эксплуатации оборудования по добыче нефти, газа и газового конденсата",
-            "1005 Работник по эксплуатации оборудования подземных хранилищ газа",
-            "414 Бурильщик капитального ремонта скважин",
-            "1195 Работник по исследованию скважин"
-//            "509 Педагог-психолог (психолог в сфере образования)"
-    )
 
     val arrayChoiceBox = arrayListOf(
             "Действия",
@@ -181,7 +172,6 @@ class Controller {
         val cleanPatch = dirtyPatch.replace("$appName.jar", "")
         return cleanPatch.substring(1)
     }
-
 
     private fun getArrayProfst(): Array<String> {
         val folder = File(getProfstFolder())
