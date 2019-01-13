@@ -2,24 +2,20 @@ import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.fxml.FXML
 import javafx.scene.control.*
-import profsandartSplit.GeneralizedWorkFunction
-import profsandartSplit.ParticularWorkFunction
-import profsandartSplit.ProfstandartSplit
-import profstandart.ProfParser
+import prof_parser.ProfParser
+import profsandart.AProfstandart
+import profsandart.GeneralizedWorkFunction
+import profsandart.ParticularWorkFunction
+import java.io.File
 import java.net.URLDecoder
 
 /**
  * @autor Kunakbaev Artem
  */
 class Controller {
-    val arrayProfstandarts = arrayListOf(
-            "255 Оператор по добыче нефти, газа и газового конденсата",
-            "821 Работник по эксплуатации оборудования по добыче нефти, газа и газового конденсата",
-            "1005 Работник по эксплуатации оборудования подземных хранилищ газа",
-            "414 Бурильщик капитального ремонта скважин",
-            "1195 Работник по исследованию скважин"
-//            "509 Педагог-психолог (психолог в сфере образования)"
-    )
+    val profFolder = "профстандарты/"
+    val defaultLog = "©АртМил"
+    val appName = "metodist"
 
     val arrayChoiceBox = arrayListOf(
             "Действия",
@@ -30,12 +26,9 @@ class Controller {
 
     var details = Details.ACTIONS
 
-    var profstandart: ProfstandartSplit? = null
+    var AProfstandart: AProfstandart? = null
     var generalizedWorkFunction: GeneralizedWorkFunction? = null
     var workFunction: ParticularWorkFunction? = null
-
-    @FXML
-    val buttonDownload = Button()
 
     @FXML
     val buttonProf = Button()
@@ -61,9 +54,14 @@ class Controller {
     @FXML
     var choiceBox = ChoiceBox<String>()
 
+    @FXML
+    var logPanel = Label()
+
     fun initListViewProfstandarts() {
+        val profList = ArrayList<String>()
+        profList.addAll(getArrayProfst())
         val observableList: ObservableList<String> =
-                FXCollections.observableArrayList(arrayProfstandarts)
+                FXCollections.observableArrayList(profList)
         listProfsandarts.items = observableList
         listProfsandarts.setOnMouseClicked {
             readProfstandart(listProfsandarts.selectionModel.selectedItem)
@@ -76,19 +74,17 @@ class Controller {
     }
 
     fun readProfstandart(thisProfName: String) {
-        val patch = javaClass.getResource("$thisProfName.json") // пытаюсь передать путь к файлам
-//        println(patch.toString())
-        val prefix = "/resources"
-        val urlToString = URLDecoder.decode(patch.toString(), "UTF-8")
-        val newPatch = urlToString.substringAfter("/")
-        val newPatch2 = newPatch.replace("!", "")
-//        val realPatch = javaClass.getResource("son").toString()
-        textAreaDetails.text = newPatch2
+        val patch = getProfstFolder() + thisProfName // пытаюсь передать путь к файлам
 
-        profstandart = ProfParser().parsing(newPatch2)
-        profName.text = profstandart!!.xMLCardInfo!!.professionalStandarts!!
+        try {
+            AProfstandart = ProfParser().parsing(patch)
+        } catch (e: java.lang.Exception) {
+            logPanel.text = e.message
+        }
+
+        profName.text = AProfstandart!!.xMLCardInfo!!.professionalStandarts!!
                 .professionalStandart!!.nameProfessionalStandart
-        purposeKindProfessionalActivity.text = profstandart!!.xMLCardInfo!!.professionalStandarts!!
+        purposeKindProfessionalActivity.text = AProfstandart!!.xMLCardInfo!!.professionalStandarts!!
                 .professionalStandart!!.firstSection!!.purposeKindProfessionalActivity
         initListViewGeneralizedWorkFunctions()
         initListViewWorkFunctions()
@@ -150,7 +146,7 @@ class Controller {
 
     private fun initListViewGeneralizedWorkFunctions() {
         //создаю ObservableList из листа названий обобщенных ТФ
-        val observableListGTF: ObservableList<GeneralizedWorkFunction> = FXCollections.observableArrayList(profstandart!!
+        val observableListGTF: ObservableList<GeneralizedWorkFunction> = FXCollections.observableArrayList(AProfstandart!!
                 .xMLCardInfo!!
                 .professionalStandarts!!
                 .professionalStandart!!
@@ -167,6 +163,24 @@ class Controller {
             showDetals()
             readWF()
         }
+    }
+
+    private fun getProfstFolder(): String? {
+        val appPatch = javaClass.protectionDomain.codeSource.location.path
+        val decoderAppPatch = URLDecoder.decode(appPatch, "UTF-8")
+        val dirtyPatch = decoderAppPatch + profFolder
+        val cleanPatch = dirtyPatch.replace("$appName.jar", "")
+        return cleanPatch.substring(1)
+    }
+
+    private fun getArrayProfst(): Array<String> {
+        val folder = File(getProfstFolder())
+        val listOfFiles = folder.listFiles()
+        val arrayProfst = Array(listOfFiles.size) { "" }
+        for (i in 0 until listOfFiles.size) {
+            if (listOfFiles[i].isFile) arrayProfst[i] = listOfFiles[i].name
+        }
+        return arrayProfst
     }
 }
 
