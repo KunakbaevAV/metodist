@@ -2,6 +2,7 @@ import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.fxml.FXML
 import javafx.scene.control.*
+import prof_parser.FileCorrector
 import prof_parser.ProfParser
 import profsandart.AProfstandart
 import profsandart.GeneralizedWorkFunction
@@ -15,7 +16,7 @@ import java.net.URLDecoder
 class Controller {
     val profFolder = "профстандарты/"
     val defaultLog = "©АртМил"
-    val appName = "metodist"
+    val appName = "Атлас профстандартов"
 
     val arrayChoiceBox = arrayListOf(
             "Действия",
@@ -56,6 +57,9 @@ class Controller {
 
     @FXML
     var logPanel = Label()
+
+    @FXML
+    val myButton = Button()
 
     fun initListViewProfstandarts() {
         val profList = ArrayList<String>()
@@ -181,6 +185,16 @@ class Controller {
             if (listOfFiles[i].isFile) arrayProfst[i] = listOfFiles[i].name
         }
         return arrayProfst
+    }
+
+    fun pressButton() {
+        readFile("255 Оператор по добыче нефти, газа и газового конденсата.json")
+    }
+
+    private fun readFile(name: String) {
+        val prefPath = getProfstFolder()
+        val allPatch = prefPath + name
+        logPanel.text = FileCorrector(allPatch).correction("\"UnitOKZ\":")
     }
 }
 
