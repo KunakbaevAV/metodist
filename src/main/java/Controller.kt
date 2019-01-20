@@ -83,7 +83,9 @@ class Controller {
         try {
             AProfstandart = ProfParser().parsing(patch)
         } catch (e: java.lang.Exception) {
-            logPanel.text = e.message
+            val corrector = FileCorrector(patch)
+            corrector.updateFile()
+            logPanel.text = "Исправлено ошибок: ${corrector.errors}"
         }
 
         profName.text = AProfstandart!!.xMLCardInfo!!.professionalStandarts!!
@@ -194,7 +196,9 @@ class Controller {
     private fun readFile(name: String) {
         val prefPath = getProfstFolder()
         val allPatch = prefPath + name
-        logPanel.text = FileCorrector(allPatch).correction("\"UnitOKZ\":")
+        val corrector = FileCorrector(allPatch)
+        corrector.updateFile()
+        logPanel.text = corrector.errors.toString()
     }
 }
 
