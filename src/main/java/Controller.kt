@@ -17,6 +17,7 @@ class Controller {
     val profFolder = "профстандарты/"
     val defaultLog = "©АртМил"
     val appName = "Атлас профстандартов"
+    var patchProfstandart = ""
 
     val arrayChoiceBox = arrayListOf(
             "Действия",
@@ -78,14 +79,15 @@ class Controller {
     }
 
     fun readProfstandart(thisProfName: String) {
-        val patch = getProfstFolder() + thisProfName // пытаюсь передать путь к файлам
-
+        val patch = getProfstFolder() + thisProfName
+        patchProfstandart = patch
         try {
             AProfstandart = ProfParser().parsing(patch)
         } catch (e: java.lang.Exception) {
-            val corrector = FileCorrector(patch)
-            corrector.updateFile()
-            logPanel.text = "Исправлено ошибок: ${corrector.errors}"
+//            val corrector = FileCorrector(patch)
+//            corrector.updateFile()
+//            logPanel.text = if (corrector.errors>0)"Исправлено ошибок: ${corrector.errors}"
+            logPanel.text = e.toString()
         }
 
         profName.text = AProfstandart!!.xMLCardInfo!!.professionalStandarts!!
@@ -190,13 +192,11 @@ class Controller {
     }
 
     fun pressButton() {
-        readFile("255 Оператор по добыче нефти, газа и газового конденсата.json")
+        readFile()
     }
 
-    private fun readFile(name: String) {
-        val prefPath = getProfstFolder()
-        val allPatch = prefPath + name
-        val corrector = FileCorrector(allPatch)
+    private fun readFile() {
+        val corrector = FileCorrector(patchProfstandart)
         corrector.updateFile()
         logPanel.text = corrector.errors.toString()
     }
