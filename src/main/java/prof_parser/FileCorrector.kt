@@ -8,6 +8,7 @@ class FileCorrector(patch: String) {
     val correctionIndex = 2
     var file = File(patch)
     var gsonText = FileReader(patch).readText()
+    val sim = "\": "
     val checkList = listOf(
 //            "UnitOKZ\"",
 //            "EducationalRequirement\"",
@@ -19,15 +20,14 @@ class FileCorrector(patch: String) {
 //            "ParticularWorkFunction\"",
 //            "NecessaryKnowledge\"",
 //            "OrganizationDeveloper\"",
-            "PossibleJobTitle\"",
-            "RequiredSkill\"",
-            "RequirementsWorkExperience\"",
-            "SpecialConditionForAdmissionToWork\"")
-    var checkedText = StringBuilder()
-    var uncheckedText = gsonText
-    var uncheckedInd = 0
-    var startInd = 0
-    var endInd = 0
+            "PossibleJobTitle$sim",
+            "RequiredSkill$sim",
+            "RequirementsWorkExperience$sim",
+            "SpecialConditionForAdmissionToWork$sim")
+    var globalCheckedText = StringBuilder()
+    var globalUncheckedText = ""
+    var noMass = true
+    var errorInd = 0
     var errors = 0
 
     fun updateFile() {
@@ -39,60 +39,64 @@ class FileCorrector(patch: String) {
 
     fun checkText(): String {
         for (i in 0 until checkList.size) {
-            while (checkNoMass(uncheckedText, checkList[i])) {
-                checkedText.append(uncheckedText.substring(startInd, endInd))
-                uncheckedText = gsonText.substring(uncheckedInd)
-                checkedText.append(doMass(uncheckedText))
-                uncheckedText = gsonText.substring(uncheckedInd)
-//                checkedText.append(gsonText.substring(startInd))
-                startInd = 0
+            globalUncheckedText = gsonText //Подготовиться к проверке на следующее словосочетание
+            while (checkNoMass(globalUncheckedText, checkList[i])) { //поиск словосочетания
+                if (noMass) {//если отсутствуют []
+                    doMass(globalUncheckedText)
+                }
             }
-            gsonText = checkedText.toString()
-            checkedText.clear()
-            uncheckedInd = 0
+            finishText()
         }
         return gsonText
     }
 
-    fun checkNoMass(text: String): Boolean {
-        val ind = gsonText.indexOf(text) + text.length
-        if (gsonText[(ind + correctionIndex)] == '[') {
-            return false
-        } else {
-            endInd = ind + correctionIndex
-            return true
-        }
-    }
-
     fun checkNoMass(uncheckedText: String, text: String): Boolean {
-        val ind = uncheckedText.indexOf(text) + text.length
-        if (ind == -1 || uncheckedText[(ind + correctionIndex)] == '[') {
+        if (uncheckedText.length < text.length){
+            finishText()
             return false
-        } else {
-            endInd = ind + correctionIndex
-            uncheckedInd += ind
+        }
+        val ind = uncheckedText.indexOf(text) + text.length
+
+        if (ind == -1) { //строка не найдена
+            finishText()
+            return false
+        } else if (uncheckedText[(ind + correctionIndex)] == '[') { //массив уже обозначен
+            updateText(ind, uncheckedText)
+            noMass = false
+            return true
+        } else { //скобки отсутствуют
+            updateText(ind, uncheckedText)
+            noMass = true
             return true
         }
     }
 
-    fun correction(uncheckedText: String): String {
-//        val uncheckedText = gsonText.substring(endInd).trim()
-        return doMass(uncheckedText)
-    }
-
-    fun doMass(text: String): String {
-        val stack = Stack(10)
+    fun doMass(text: String) {
+        val stack = Stack(100)
         stack.push('{')
         for (i in 0 until text.length) {
             if (text[i] == '{') stack.push(text[i])
             if (text[i] == '}') stack.pop()
             if (stack.isEmpty()) {
-                startInd += endInd + i
-                uncheckedInd += i
+                globalCheckedText.append('[')
+                globalCheckedText.append(text.substring(0, i))
+                globalCheckedText.append(']')
+                globalUncheckedText = text.substring(i)
                 errors++
-                return "[${text.substring(0, i - 1)}]"
+                break
             }
         }
-        return "ошибка"
+    }
+
+    fun updateText(index: Int, text: String){
+        globalCheckedText.append(text.substring(0, index))
+        globalUncheckedText = text.substring(index)
+    }
+
+    fun finishText(){
+        globalCheckedText.append(globalUncheckedText)
+        gsonText = globalCheckedText.toString()
+        globalCheckedText.clear()
+        globalUncheckedText = gsonText
     }
 }

@@ -198,7 +198,7 @@ class Controller {
     private fun readFile() {
         val corrector = FileCorrector(patchProfstandart)
         corrector.updateFile()
-        logPanel.text = corrector.errors.toString()
+        logPanel.text = "Исправлено ошибок: " + corrector.errors.toString()
     }
 }
 
