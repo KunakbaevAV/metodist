@@ -5,29 +5,29 @@ import java.io.FileReader
 import java.io.FileWriter
 
 class FileCorrector(patch: String) {
-    val correctionIndex = 2
     var file = File(patch)
     var gsonText = FileReader(patch).readText()
     val sim = "\": "
     val checkList = listOf(
-//            "UnitOKZ\"",
-//            "EducationalRequirement\"",
-//            "GeneralizedWorkFunction\"",
-//            "LaborAction\"",
-//            "UnitEKS\"",
-//            "UnitOKVED\"",
-//            "UnitOKZ\"",
-//            "ParticularWorkFunction\"",
-//            "NecessaryKnowledge\"",
-//            "OrganizationDeveloper\"",
+            "UnitOKZ$sim",
+            "EducationalRequirement$sim",
+            "GeneralizedWorkFunction$sim",
+            "LaborAction$sim",
+            "UnitEKS$sim",
+            "UnitOKVED$sim",
+            "UnitOKZ$sim",
+            "ParticularWorkFunction$sim",
+            "NecessaryKnowledge$sim",
+            "OrganizationDeveloper$sim",
             "PossibleJobTitle$sim",
             "RequiredSkill$sim",
             "RequirementsWorkExperience$sim",
-            "SpecialConditionForAdmissionToWork$sim")
+            "SpecialConditionForAdmissionToWork$sim"
+    )
     var globalCheckedText = StringBuilder()
-    var globalUncheckedText = ""
-    var noMass = true
-    var errorInd = 0
+    var globalUncheckedText = StringBuilder().append(gsonText)
+    var noMass = false
+    var search = true
     var errors = 0
 
     fun updateFile() {
@@ -38,11 +38,20 @@ class FileCorrector(patch: String) {
     }
 
     fun checkText(): String {
+        var searshIndex: Int
         for (i in 0 until checkList.size) {
-            globalUncheckedText = gsonText //Подготовиться к проверке на следующее словосочетание
-            while (checkNoMass(globalUncheckedText, checkList[i])) { //поиск словосочетания
-                if (noMass) {//если отсутствуют []
-                    doMass(globalUncheckedText)
+            while (true) {
+                searshIndex = findIndex(checkList[i])
+                if (searshIndex == -1) {
+                    break
+                } else {
+                    updateText(searshIndex + checkList[i].length)
+                }
+
+                if (checkNoMass(checkList[i])) {
+                    if (noMass) {
+                        doMass()
+                    }
                 }
             }
             finishText()
@@ -50,53 +59,56 @@ class FileCorrector(patch: String) {
         return gsonText
     }
 
-    fun checkNoMass(uncheckedText: String, text: String): Boolean {
-        if (uncheckedText.length < text.length){
-            finishText()
-            return false
-        }
-        val ind = uncheckedText.indexOf(text) + text.length
-
-        if (ind == -1) { //строка не найдена
-            finishText()
-            return false
-        } else if (uncheckedText[(ind + correctionIndex)] == '[') { //массив уже обозначен
-            updateText(ind, uncheckedText)
-            noMass = false
-            return true
-        } else { //скобки отсутствуют
-            updateText(ind, uncheckedText)
-            noMass = true
-            return true
-        }
+    fun findIndex(word: String): Int {
+        return globalUncheckedText.indexOf(word)
     }
 
-    fun doMass(text: String) {
+    fun checkNoMass(word: String): Boolean {
+        if (globalUncheckedText.length < word.length) {
+            finishText()
+            search = false
+            return false
+        }
+
+        if (globalUncheckedText.trim().startsWith('[')) { //массив уже обозначен
+            noMass = false
+            search = true
+            return true
+        } else {
+            noMass = true
+            search = true
+            return true
+        }
+
+    }
+
+    fun doMass() {
         val stack = Stack(100)
         stack.push('{')
-        for (i in 0 until text.length) {
-            if (text[i] == '{') stack.push(text[i])
-            if (text[i] == '}') stack.pop()
+        for (i in 0 until globalUncheckedText.length) {
+            if (globalUncheckedText[i] == '{') stack.push('{')
+            if (globalUncheckedText[i] == '}') stack.pop()
             if (stack.isEmpty()) {
                 globalCheckedText.append('[')
-                globalCheckedText.append(text.substring(0, i))
+                globalCheckedText.append(globalUncheckedText.substring(0, i))
                 globalCheckedText.append(']')
-                globalUncheckedText = text.substring(i)
+                globalUncheckedText = globalUncheckedText.delete(0, i)
                 errors++
                 break
             }
         }
     }
 
-    fun updateText(index: Int, text: String){
-        globalCheckedText.append(text.substring(0, index))
-        globalUncheckedText = text.substring(index)
+    fun updateText(index: Int) {
+        globalCheckedText.append(globalUncheckedText.substring(0, index))
+        globalUncheckedText.delete(0, index)
     }
 
-    fun finishText(){
+    fun finishText() {
         globalCheckedText.append(globalUncheckedText)
         gsonText = globalCheckedText.toString()
         globalCheckedText.clear()
-        globalUncheckedText = gsonText
+        globalUncheckedText.clear()
+        globalUncheckedText.append(gsonText)
     }
 }

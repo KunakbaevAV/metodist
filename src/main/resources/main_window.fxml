@@ -2,7 +2,8 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<AnchorPane prefHeight="604.0" prefWidth="834.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="604.0" prefWidth="834.0"
+            xmlns="http://javafx.com/javafx/8.0.172-ea" fx:controller="Controller">
     <Button fx:id="buttonProf" layoutX="604.0" layoutY="9.0" mnemonicParsing="false" onAction="#initListViewProfstandarts" text="Загрузить" AnchorPane.rightAnchor="160.0" AnchorPane.topAnchor="4.0" />
     <Label layoutX="24.0" layoutY="14.0" prefHeight="27.0" prefWidth="345.0" text="Название профессионального стандарта" AnchorPane.leftAnchor="24.0" AnchorPane.topAnchor="8.0" />
     <TextArea fx:id="purposeKindProfessionalActivity" depthTest="DISABLE" layoutX="25.0" layoutY="107.0" minHeight="-Infinity" prefHeight="76.0" prefWidth="590.0" wrapText="true" AnchorPane.leftAnchor="8.0" AnchorPane.topAnchor="84.0" />
@@ -19,6 +20,6 @@
    <ChoiceBox fx:id="choiceBox" layoutX="676.0" layoutY="396.0" prefWidth="150.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="396.0" />
     <Label fx:id="logPanel" layoutX="10.0" layoutY="573.0" text="©АртМил" AnchorPane.bottomAnchor="8.0"
            AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0"/>
-    <Button fx:id="myButton" layoutX="91.0" layoutY="567.0" mnemonicParsing="false" text="Button"
-            onAction="#pressButton"/>
+    <Button fx:id="myButton" layoutX="581.0" layoutY="396.0" mnemonicParsing="false" onAction="#pressButton"
+            text="Адаптировать" AnchorPane.rightAnchor="160.0" AnchorPane.topAnchor="396.0"/>
 </AnchorPane>
