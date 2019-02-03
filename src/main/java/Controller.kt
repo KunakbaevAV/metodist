@@ -84,9 +84,6 @@ class Controller {
         try {
             AProfstandart = ProfParser().parsing(patch)
         } catch (e: java.lang.Exception) {
-//            val corrector = FileCorrector(patch)
-//            corrector.updateFile()
-//            logPanel.text = if (corrector.errors>0)"Исправлено ошибок: ${corrector.errors}"
             logPanel.text = e.toString()
         }
 
