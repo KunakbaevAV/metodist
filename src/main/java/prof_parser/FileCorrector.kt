@@ -5,6 +5,7 @@ import java.io.FileReader
 import java.io.FileWriter
 
 class FileCorrector(val patch: String) {
+    var nameProfstandart = ""
     var file = File(patch)
     var newFile = File(patch)
     var jsonText = FileReader(patch).readText()
@@ -31,32 +32,32 @@ class FileCorrector(val patch: String) {
     var noMass = false
     var search = true
     var errors = 0
+    var log = "empty"
 
     fun updateFile() {
         checkIfXml()
+        val text = checkText()
+        newFile = File(createNewPatch(text))
         val writer = FileWriter(newFile)
-        writer.append(checkText())
-
+        writer.write(text)
         writer.close()
     }
 
     fun checkIfXml() {
         if (patch.endsWith(".xml")) {
-            jsonText = xmlAdapter.readXML(patch)
+            xmlAdapter.readXML(patch)
+            val text = FileReader(patch).readText()
+            jsonText = text
             globalUncheckedText.clear()
             globalUncheckedText.append(jsonText)
-
-            val prePatch = patch.substringBeforeLast("/")
-            val fileName = findNameProf(jsonText)
-            newFile = File(prePatch + "/" + fileName + ".json")
-
-            file.delete()
         }
     }
 
-    fun findNameProf(text: String): String {
-        val nameProf = text.substringAfter("NameProfessionalStandart\": \"")
-        return nameProf.substringBefore("\"")
+    fun createNewPatch(text: String): String {
+        val prePatch = patch.substringBeforeLast("/")
+        val numberProf = text.substringAfter("\"RegistrationNumber\": ")
+        val onlyNumberProf = numberProf.substringBefore(",")
+        return prePatch + "/" + onlyNumberProf
     }
 
     fun checkText(): String {

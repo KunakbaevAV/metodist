@@ -64,12 +64,12 @@ class Controller {
     @FXML
     val adapter = Button()
 
-    @FXML
-    val myButton = Button()
-
-//    fun pressMyButton(){
-//        val corrector = FileCorrector(patchProfstandart)
-//        logPanel.text = corrector.checkIfXml()
+//    @FXML
+//    val myButton = Button()
+//
+//    fun deleteFile(){
+//        val file = File(patchProfstandart)
+//        file.delete()
 //    }
 
     fun initListViewProfstandarts() {
@@ -94,8 +94,7 @@ class Controller {
         try {
             AProfstandart = ProfParser().parsing(patch)
         } catch (e: java.lang.Exception) {
-            logPanel.text = e.toString()
-            startAdapter()
+            logPanel.text = "Файл нужно адаптировать"
         }
 
         profName.text = AProfstandart!!.xMLCardInfo!!.professionalStandarts!!
