@@ -4,9 +4,11 @@ import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
 
-class FileCorrector(patch: String) {
+class FileCorrector(val patch: String) {
     var file = File(patch)
-    var gsonText = FileReader(patch).readText()
+    var newFile = File(patch)
+    var jsonText = FileReader(patch).readText()
+    val xmlAdapter = XMLadapter()
     val sim = "\": "
     val checkList = listOf(
             "UnitOKZ$sim",
@@ -25,16 +27,36 @@ class FileCorrector(patch: String) {
             "SpecialConditionForAdmissionToWork$sim"
     )
     var globalCheckedText = StringBuilder()
-    var globalUncheckedText = StringBuilder().append(gsonText)
+    var globalUncheckedText = StringBuilder().append(jsonText)
     var noMass = false
     var search = true
     var errors = 0
 
     fun updateFile() {
-        val writer = FileWriter(file)
+        checkIfXml()
+        val writer = FileWriter(newFile)
         writer.append(checkText())
-        writer.close()
 
+        writer.close()
+    }
+
+    fun checkIfXml() {
+        if (patch.endsWith(".xml")) {
+            jsonText = xmlAdapter.readXML(patch)
+            globalUncheckedText.clear()
+            globalUncheckedText.append(jsonText)
+
+            val prePatch = patch.substringBeforeLast("/")
+            val fileName = findNameProf(jsonText)
+            newFile = File(prePatch + "/" + fileName + ".json")
+
+            file.delete()
+        }
+    }
+
+    fun findNameProf(text: String): String {
+        val nameProf = text.substringAfter("NameProfessionalStandart\": \"")
+        return nameProf.substringBefore("\"")
     }
 
     fun checkText(): String {
@@ -56,7 +78,7 @@ class FileCorrector(patch: String) {
             }
             finishText()
         }
-        return gsonText
+        return jsonText
     }
 
     fun findIndex(word: String): Int {
@@ -106,9 +128,9 @@ class FileCorrector(patch: String) {
 
     fun finishText() {
         globalCheckedText.append(globalUncheckedText)
-        gsonText = globalCheckedText.toString()
+        jsonText = globalCheckedText.toString()
         globalCheckedText.clear()
         globalUncheckedText.clear()
-        globalUncheckedText.append(gsonText)
+        globalUncheckedText.append(jsonText)
     }
 }

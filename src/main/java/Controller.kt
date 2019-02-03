@@ -2,6 +2,7 @@ import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.fxml.FXML
 import javafx.scene.control.*
+import prof_parser.Copy
 import prof_parser.FileCorrector
 import prof_parser.ProfParser
 import profsandart.AProfstandart
@@ -18,6 +19,7 @@ class Controller {
     val defaultLog = "©АртМил"
     val appName = "Атлас профстандартов"
     var patchProfstandart = ""
+    val copy = Copy()
 
     val arrayChoiceBox = arrayListOf(
             "Действия",
@@ -60,7 +62,15 @@ class Controller {
     var logPanel = Label()
 
     @FXML
+    val adapter = Button()
+
+    @FXML
     val myButton = Button()
+
+//    fun pressMyButton(){
+//        val corrector = FileCorrector(patchProfstandart)
+//        logPanel.text = corrector.checkIfXml()
+//    }
 
     fun initListViewProfstandarts() {
         val profList = ArrayList<String>()
@@ -85,6 +95,7 @@ class Controller {
             AProfstandart = ProfParser().parsing(patch)
         } catch (e: java.lang.Exception) {
             logPanel.text = e.toString()
+            startAdapter()
         }
 
         profName.text = AProfstandart!!.xMLCardInfo!!.professionalStandarts!!
@@ -130,6 +141,7 @@ class Controller {
     private fun initListViewWorkFunctions() {
         listViewWF.setOnMouseClicked {
             workFunction = listViewWF.selectionModel.selectedItem
+            copy.doCopy(workFunction.toString().substringAfter(" "))
             showDetals()
         }
     }
@@ -164,6 +176,7 @@ class Controller {
         listViewGWF.items = observableListGTF
         listViewGWF.setOnMouseClicked {
             generalizedWorkFunction = listViewGWF.selectionModel.selectedItem
+            copy.doCopy(generalizedWorkFunction.toString().substringAfter(" "))
             workFunction = null
             showDetals()
             readWF()
@@ -188,14 +201,11 @@ class Controller {
         return arrayProfst
     }
 
-    fun pressButton() {
-        readFile()
-    }
-
-    private fun readFile() {
+    fun startAdapter() {
         val corrector = FileCorrector(patchProfstandart)
         corrector.updateFile()
         logPanel.text = "Исправлено ошибок: " + corrector.errors.toString()
+        initListViewProfstandarts()
     }
 }
 

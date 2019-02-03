@@ -20,6 +20,6 @@
    <ChoiceBox fx:id="choiceBox" layoutX="676.0" layoutY="396.0" prefWidth="150.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="396.0" />
     <Label fx:id="logPanel" layoutX="10.0" layoutY="573.0" text="©АртМил" AnchorPane.bottomAnchor="8.0"
            AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0"/>
-    <Button fx:id="myButton" layoutX="581.0" layoutY="396.0" mnemonicParsing="false" onAction="#pressButton"
-            text="Адаптировать" AnchorPane.rightAnchor="160.0" AnchorPane.topAnchor="396.0"/>
+    <Button fx:id="adapter" layoutX="505.0" layoutY="4.0" mnemonicParsing="false" onAction="#startAdapter"
+            text="Адаптировать" AnchorPane.rightAnchor="236.0" AnchorPane.topAnchor="4.0"/>
 </AnchorPane>
