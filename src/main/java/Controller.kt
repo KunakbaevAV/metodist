@@ -2,6 +2,7 @@ import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.fxml.FXML
 import javafx.scene.control.*
+import prof_parser.Copy
 import prof_parser.FileCorrector
 import prof_parser.ProfParser
 import profsandart.AProfstandart
@@ -18,6 +19,7 @@ class Controller {
     val defaultLog = "©АртМил"
     val appName = "Атлас профстандартов"
     var patchProfstandart = ""
+    val copy = Copy()
 
     val arrayChoiceBox = arrayListOf(
             "Действия",
@@ -130,6 +132,7 @@ class Controller {
     private fun initListViewWorkFunctions() {
         listViewWF.setOnMouseClicked {
             workFunction = listViewWF.selectionModel.selectedItem
+            copy.doCopy(workFunction.toString().substringAfter(" "))
             showDetals()
         }
     }
@@ -164,6 +167,7 @@ class Controller {
         listViewGWF.items = observableListGTF
         listViewGWF.setOnMouseClicked {
             generalizedWorkFunction = listViewGWF.selectionModel.selectedItem
+            copy.doCopy(generalizedWorkFunction.toString().substringAfter(" "))
             workFunction = null
             showDetals()
             readWF()

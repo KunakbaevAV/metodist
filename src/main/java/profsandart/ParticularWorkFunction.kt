@@ -32,4 +32,6 @@ data class ParticularWorkFunction(
     override fun toString(): String {
         return "$codeTF $nameTF"
     }
+
+    fun simpleName() = nameTF.toString()
 }
