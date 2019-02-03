@@ -36,7 +36,7 @@ class FileCorrector(val patch: String) {
         checkIfXml()
         val writer = FileWriter(newFile)
         writer.append(checkText())
-        file.delete()
+
         writer.close()
     }
 
@@ -49,6 +49,8 @@ class FileCorrector(val patch: String) {
             val prePatch = patch.substringBeforeLast("/")
             val fileName = findNameProf(jsonText)
             newFile = File(prePatch + "/" + fileName + ".json")
+
+            file.delete()
         }
     }
 

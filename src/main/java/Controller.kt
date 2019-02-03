@@ -95,6 +95,7 @@ class Controller {
             AProfstandart = ProfParser().parsing(patch)
         } catch (e: java.lang.Exception) {
             logPanel.text = e.toString()
+            startAdapter()
         }
 
         profName.text = AProfstandart!!.xMLCardInfo!!.professionalStandarts!!
@@ -204,7 +205,7 @@ class Controller {
         val corrector = FileCorrector(patchProfstandart)
         corrector.updateFile()
         logPanel.text = "Исправлено ошибок: " + corrector.errors.toString()
-//        logPanel.text = corrector.log
+        initListViewProfstandarts()
     }
 }
 
