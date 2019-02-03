@@ -8,9 +8,9 @@ import java.io.File
  * @autor Kunakbaev Artem
  */
 class JsonReader {
-    fun readJson(xmlFile: String): AProfstandart {
+    fun readJson(jsonFile: String): AProfstandart {
         val gson = Gson()
-        val text = File(xmlFile).readText()
+        val text = File(jsonFile).readText()
         return gson.fromJson<AProfstandart>(text, AProfstandart::class.java)
     }
 }

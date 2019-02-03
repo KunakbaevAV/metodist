@@ -62,7 +62,15 @@ class Controller {
     var logPanel = Label()
 
     @FXML
+    val adapter = Button()
+
+    @FXML
     val myButton = Button()
+
+//    fun pressMyButton(){
+//        val corrector = FileCorrector(patchProfstandart)
+//        logPanel.text = corrector.checkIfXml()
+//    }
 
     fun initListViewProfstandarts() {
         val profList = ArrayList<String>()
@@ -192,14 +200,11 @@ class Controller {
         return arrayProfst
     }
 
-    fun pressButton() {
-        readFile()
-    }
-
-    private fun readFile() {
+    fun startAdapter() {
         val corrector = FileCorrector(patchProfstandart)
         corrector.updateFile()
         logPanel.text = "Исправлено ошибок: " + corrector.errors.toString()
+//        logPanel.text = corrector.log
     }
 }
 
